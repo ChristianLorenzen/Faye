@@ -3,7 +3,8 @@ OBJDIR = out
 sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
 flags = -g
-move = mv $(objects) out/
+OUTDIR = out/
+move = mv $(objects) $(OUTDIR)
 OUTPROG = /usr/local/bin/
 
 
@@ -17,6 +18,7 @@ install:
 	make
 	test -d $(OUTPROG) || mkdir $(OUTPROG)
 	cp ./faye.out $(OUTPROG)faye
+	test -d $(OUTDIR) || mkdir $(OUTDIR)
 	$(move)
 
 clean:
