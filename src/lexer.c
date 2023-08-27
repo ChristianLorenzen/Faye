@@ -28,9 +28,9 @@ void lexer_advance(lexer_T* lexer)
 
 void lexer_skip_whitespace(lexer_T* lexer)
 {
-    while(lexer->c == ' ' || lexer->c == 10 || lexer->c == 13) {
+    while(lexer->c == ' ' || lexer->c == '\n') {
 
-        if (lexer->c == 10 || lexer->c == 13) { lexer->line += 1;}
+        if (lexer->c == 10) { lexer->line += 1;}
 
         lexer_advance(lexer);
     }
