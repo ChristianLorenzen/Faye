@@ -27,7 +27,7 @@ function testfunc()
     function into(string testingT) {
         #ignore comment
         print("Before print test");
-        print(testingT);
+        #print(testingT);
     };
 
     into("Hello");
@@ -38,7 +38,7 @@ function testRun() {
 
     print("Hi");
     testfunc();
-    testfunc();
+    #testfunc();
     #This can be ignored
     into();
     #Ignore as well
@@ -47,13 +47,13 @@ function testRun() {
 
 
 
-var test = "Hello";
+string test = "Hello";
 
 print(test); #This is a line comment which should be ignored
 
-#testRun("hello");
+testRun("hello");
 
-function test(var x) {
+function test(string x) {
     print(x);
 };
 

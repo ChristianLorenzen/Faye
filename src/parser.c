@@ -295,7 +295,7 @@ AST_T *parser_parse_variable(parser_T *parser, scope_T* scope)
 
 AST_T* parser_parse_int(parser_T* parser, scope_T* scope)
 {
-    printf("Parsing int: %s\n", parser->current_token->value);
+    //printf("Parsing int: %s\n", parser->current_token->value);
 
     AST_T* ast_int = init_ast_with_line(AST_INT, parser->current_token->line);
 
@@ -310,7 +310,7 @@ AST_T* parser_parse_int(parser_T* parser, scope_T* scope)
 
 AST_T* parser_parse_float(parser_T* parser, scope_T* scope)
 {
-    printf("Parsing float: %s\n", parser->current_token->value);
+    //printf("Parsing float: %s\n", parser->current_token->value);
     AST_T* ast_float = init_ast_with_line(AST_FLOAT, parser->current_token->line);
 
     ast_float->float_value = atof(parser->current_token->value);
@@ -324,7 +324,7 @@ AST_T* parser_parse_float(parser_T* parser, scope_T* scope)
 
 AST_T* parser_parse_bool(parser_T* parser, scope_T* scope)
 {
-    printf("Parsing bool: %s\n", parser->current_token->value);
+    //printf("Parsing bool: %s\n", parser->current_token->value);
 
     AST_T* ast_bool = init_ast_with_line(AST_BOOL, parser->current_token->line);
 
@@ -341,7 +341,7 @@ AST_T* parser_parse_bool(parser_T* parser, scope_T* scope)
 
 AST_T *parser_parse_string(parser_T *parser, scope_T* scope)
 {
-    printf("Parsing string: %s\n", parser->current_token->value);
+    //printf("Parsing string: %s\n", parser->current_token->value);
 
     AST_T* ast_string = init_ast_with_line(AST_STRING, parser->current_token->line);
 
