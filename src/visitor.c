@@ -55,19 +55,7 @@ AST_T* visitor_visit(visitor_T* visitor, AST_T* node)
 
 AST_T* visitor_visit_variable_definition(visitor_T* visitor, AST_T* node)
 {
-    if (visitor->variable_definitions == (void*) 0)
-    {
-        visitor->variable_definitions = calloc(1, sizeof(struct AST_STRUCT*));
-        visitor->variable_definitions[0] = node;
-        visitor->variable_definitions_size += 1;
-    } else 
-    {
-        visitor->variable_definitions_size += 1;
-
-        visitor->variable_definitions = realloc(visitor->variable_definitions, visitor->variable_definitions_size * sizeof(struct AST_STRUCT*));
-
-        visitor->variable_definitions[visitor->variable_definitions_size - 1] = node;
-    }
+    scope_add_variable_definition(node->scope, node);
 
     return node;
 }
@@ -81,19 +69,21 @@ AST_T* visitor_visit_function_definition(visitor_T* visitor, AST_T* node)
 
 AST_T* visitor_visit_variable(visitor_T* visitor, AST_T* node)
 {
-    for (int i = 0; i < visitor->variable_definitions_size; i++) 
-    {
-        AST_T* vardef = visitor->variable_definitions[i];
+    AST_T* vdef = scope_get_variable_definition(node->scope, node->variable_name);
 
-        if (strcmp(vardef->variable_definition_variable_name, node->variable_name) == 0)
-        {
-            return visitor_visit(visitor, vardef->variable_definition_value);
-        }
+    if (vdef == (void*)0)
+    {
+        printf("Undefined variable '%s'\n", node->variable_name);
+        exit(1);
+        return visitor_visit(visitor, vdef->variable_definition_value);
     }
 
-    printf("Line %d - Undefined variable: '%s'\n", node->line, node->variable_name);
+    AST_T* ast_var = init_ast(AST_VARIABLE_DEFINITION);
+    AST_T* string_ast = init_ast(AST_STRING);
+    string_ast->string_value = "This is a test";
+    ast_var->variable_definition_value = string_ast;
 
-    return node;
+    return visitor_visit(visitor, vdef->variable_definition_value);
 }
 
 AST_T* visitor_visit_function_call(visitor_T* visitor, AST_T* node)

@@ -6,7 +6,7 @@
 
 void print_help()
 {
-    printf("Usage:\n biter.out <filename>\n");
+    printf("Usage:\n faye <filename>\n");
     exit(2);
 }
 

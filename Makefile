@@ -6,7 +6,7 @@ flags = -g
 OUTDIR = out/
 move = mv $(objects) $(OUTDIR)
 OUTPROG = /usr/local/bin/
-
+PROGDIR = src/
 
 $(exec): $(objects)
 	gcc $(objects) $(flags) -o $(exec)
@@ -24,5 +24,6 @@ install:
 clean:
 	-rm *.out
 	-rm *.o
-	-rm src/*.o
+	test -d $(PROGDIR) || -rm $(PROGDIR)*.o
+
 
