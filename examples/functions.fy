@@ -56,6 +56,8 @@ function test(string x) {
     print(x);
 };
 
+/*
+
 test(15);
 test(15);
 test(true);
