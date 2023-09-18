@@ -1,4 +1,4 @@
-use crate::f_token::{Token, TokenType};
+use crate::token::{Token, TokenType};
 
 pub struct Lexer {
     pub contents : String,
@@ -86,7 +86,7 @@ impl Lexer {
             self.advance();
                 Token::create(TokenType::TOKEN_STRING, &string_value,  self.line, 0)
             }
-    
+
         pub fn collect_number(&mut self) -> Token {
                 let mut string_value = "".to_string();
                 while self.character.is_digit(10) {
@@ -95,35 +95,35 @@ impl Lexer {
                 }
             return Token::create(TokenType::TOKEN_VARIABLE, &string_value, self.line, 0)
             }
-    
+
         pub fn collect_id(&mut self) -> Token {
                 let mut string_value = "".to_string();
                 while self.character.is_alphabetic() {
                     string_value.push(self.character);
-    
+
                     self.advance();
                 }
             return Token::create(TokenType::TOKEN_ID, &string_value, self.line, 0)
             }
-    
+
         pub fn collect_line_comment(&mut self) -> Token {
                 let mut string_value = "".to_string();
-    
+
                 while self.character != '\n' && self.character != '\0' {
                     string_value.push(self.character);
-    
+
                     self.advance();
                 }
-    
+
             return Token::create(TokenType::TOKEN_LINE_COMMENT, &string_value, self.line, 0)
             }
-    
+
         pub fn advance_with_token(&mut self, token : Token) -> Token {
                 self.advance();
-    
+
                 token
             }
-    
+
         pub fn character_as_string(&mut self) -> String {
                 self.character.to_string()
             }

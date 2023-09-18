@@ -14,7 +14,7 @@ function testfunc()
     print(intTest);
     #int invalidInt = "Hello There";
 
-    float floatTest = 3.7;
+    float floatTest = 37;
 
     bool isTrue = true;
 
@@ -56,7 +56,7 @@ function test(string x) {
     print(x);
 };
 
-test(1.5);
+test(15);
 test(15);
 test(true);
 test("TestString");
