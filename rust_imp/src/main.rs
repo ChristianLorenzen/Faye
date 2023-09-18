@@ -24,7 +24,8 @@ fn main() {
 
     while !matches!(token.token_type, token::TokenType::TOKEN_EOF) {
         token = lex.next();
-        println!("The first lexer token is {} with type {}", &token.value, &token.token_type);
+        token.print();
+        //println!("The first lexer token is {} with type {}", &token.value, &token.token_type);
     }
 
 }

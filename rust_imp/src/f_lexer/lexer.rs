@@ -30,7 +30,13 @@ impl Lexer {
 
         pub fn skip_whitespace(&mut self) {
             while self.character == ' ' || self.character == '\n' {
-                if self.character == '\n' { self.line += 1 };
+                if self.character == '\n' {
+                    self.line += 1;
+                    self.column = 0;
+                }
+                else {
+                    self.column+= 1;
+                }
                 self.advance();
             }
         }
@@ -58,22 +64,22 @@ impl Lexer {
                 }
 
                 match self.character {
-                    '=' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_EQUALS, &"=".to_string(), self.line, 0)),
-                    ';' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_SEMICOLON, &";".to_string(), self.line, 0)),
-                    '(' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_LPARENTHESIS, &"(".to_string(), self.line, 0)),
-                    ')' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_RPARENTHESIS, &")".to_string(), self.line, 0)),
-                    '{' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_LBRACE, &"{".to_string(), self.line, 0)),
-                    '}' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_RBRACE, &"}".to_string(), self.line, 0)),
-                    ',' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_COMMA, &",".to_string(), self.line, 0)),
-                    '+' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_PLUS, &"+".to_string(), self.line, 0)),
-                    '-' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_MINUS, &"-".to_string(), self.line, 0)),
-                    '/' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_DIVIDE, &"/".to_string(), self.line, 0)),
-                    '*' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_MULTIPLY, &"*".to_string(), self.line, 0)),
+                    '=' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_EQUALS, &"=".to_string(), self.line, self.column)),
+                    ';' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_SEMICOLON, &";".to_string(), self.line, self.column)),
+                    '(' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_LPARENTHESIS, &"(".to_string(), self.line, self.column)),
+                    ')' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_RPARENTHESIS, &")".to_string(), self.line, self.column)),
+                    '{' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_LBRACE, &"{".to_string(), self.line, self.column)),
+                    '}' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_RBRACE, &"}".to_string(), self.line, self.column)),
+                    ',' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_COMMA, &",".to_string(), self.line, self.column)),
+                    '+' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_PLUS, &"+".to_string(), self.line, self.column)),
+                    '-' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_MINUS, &"-".to_string(), self.line, self.column)),
+                    '/' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_DIVIDE, &"/".to_string(), self.line, self.column)),
+                    '*' => return Lexer::advance_with_token(self, Token::create(TokenType::TOKEN_MULTIPLY, &"*".to_string(), self.line, self.column)),
                     _ => continue
                 }
             }
 
-        Token::create(TokenType::TOKEN_EOF, &'\0'.to_string(), self.line, 0)
+        Token::create(TokenType::TOKEN_EOF, &'\0'.to_string(), self.line, self.column)
         }
 
         pub fn collect_string(&mut self) -> Token {
@@ -84,8 +90,8 @@ impl Lexer {
                     self.advance();
                 }
             self.advance();
-                Token::create(TokenType::TOKEN_STRING, &string_value,  self.line, 0)
-            }
+                Token::create(TokenType::TOKEN_STRING, &string_value,  self.line, self.column)
+        }
 
         pub fn collect_number(&mut self) -> Token {
                 let mut string_value = "".to_string();
@@ -93,8 +99,8 @@ impl Lexer {
                     string_value.push(self.character);
                     self.advance();
                 }
-            return Token::create(TokenType::TOKEN_VARIABLE, &string_value, self.line, 0)
-            }
+            return Token::create(TokenType::TOKEN_VARIABLE, &string_value, self.line, self.column)
+        }
 
         pub fn collect_id(&mut self) -> Token {
                 let mut string_value = "".to_string();
@@ -103,8 +109,8 @@ impl Lexer {
 
                     self.advance();
                 }
-            return Token::create(TokenType::TOKEN_ID, &string_value, self.line, 0)
-            }
+            return Token::create(TokenType::TOKEN_ID, &string_value, self.line, self.column)
+        }
 
         pub fn collect_line_comment(&mut self) -> Token {
                 let mut string_value = "".to_string();
@@ -115,16 +121,17 @@ impl Lexer {
                     self.advance();
                 }
 
-            return Token::create(TokenType::TOKEN_LINE_COMMENT, &string_value, self.line, 0)
-            }
+            return Token::create(TokenType::TOKEN_LINE_COMMENT, &string_value, self.line, self.column)
+        }
 
         pub fn advance_with_token(&mut self, token : Token) -> Token {
                 self.advance();
 
                 token
-            }
+        }
 
         pub fn character_as_string(&mut self) -> String {
                 self.character.to_string()
-            }
+        }
+
 }

@@ -4,7 +4,24 @@ pub struct Token {
     pub token_type: TokenType,
     pub value: String,
     pub line: usize,
-    pub column: usize,        
+    pub column: usize,
+}
+
+
+impl Token {
+        pub fn create(t_type: TokenType, val : &String, line_num : usize, col : usize) -> Token {
+            Token {
+                token_type: t_type,
+                value: val.clone(),
+                line: line_num,
+                column: col,
+            }
+        }
+
+        pub fn print(&mut self) -> () {
+            println!("Token id: {}\nToken Value: {}\nToken line/column: {}:{}",
+                self.token_type, self.value, self.line, self.column);
+        }
 }
 
 pub enum TokenType {
@@ -35,17 +52,6 @@ pub enum TokenType {
     TOKEN_EOF,
 
 }
-
-impl Token {
-        pub fn create(t_type: TokenType, val : &String, line_num : usize, col : usize) -> Token {
-            Token {
-                token_type: t_type,
-                value: val.clone(),
-                line: line_num,
-                column: col,
-            }
-        }
-    }
 
 impl fmt::Display for TokenType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
