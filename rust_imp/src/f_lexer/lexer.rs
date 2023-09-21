@@ -30,8 +30,14 @@ impl Lexer {
 
     pub fn advance(&mut self) {
         if self.character != '\0' && self.indexer < self.content_length {
+            if (self.character == '\n') {
+                self.line += 1;
+                self.column = 0;
+            } else {
+                self.column += 1;
+            }
+
             self.indexer += 1;
-            self.column += 1;
             self.character = self
                 .contents
                 .chars()
@@ -42,16 +48,16 @@ impl Lexer {
 
     pub fn skip_whitespace(&mut self) {
         while self.character == ' ' || self.character == '\n' {
-            if self.character == '\n' {
-                self.line += 1;
-                self.column = 0;
-            }
             self.advance();
         }
     }
 
     pub fn next(&mut self) -> Token {
         while self.character != '\0' && self.indexer < self.content_length {
+            if (self.character == '\n') {
+                println!("Newline Character {}:{}", self.line, self.column);
+            }
+
             if self.character == ' ' || self.character == '\n' {
                 self.skip_whitespace();
             }
@@ -83,7 +89,7 @@ impl Lexer {
                             TokenType::TOKEN_EQUALS,
                             &"=".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -94,7 +100,7 @@ impl Lexer {
                             TokenType::TOKEN_SEMICOLON,
                             &";".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -105,7 +111,7 @@ impl Lexer {
                             TokenType::TOKEN_LPARENTHESIS,
                             &"(".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -116,7 +122,7 @@ impl Lexer {
                             TokenType::TOKEN_RPARENTHESIS,
                             &")".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -127,7 +133,7 @@ impl Lexer {
                             TokenType::TOKEN_LBRACE,
                             &"{".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -138,7 +144,7 @@ impl Lexer {
                             TokenType::TOKEN_RBRACE,
                             &"}".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -149,7 +155,7 @@ impl Lexer {
                             TokenType::TOKEN_COMMA,
                             &",".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -160,7 +166,7 @@ impl Lexer {
                             TokenType::TOKEN_PLUS,
                             &"+".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -171,21 +177,13 @@ impl Lexer {
                             TokenType::TOKEN_MINUS,
                             &"-".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
                 '/' => {
                     if (self.peek() == '*') {
-                        return Lexer::advance_with_token(
-                            self,
-                            Token::create(
-                                TokenType::TOKEN_MULTILINE_COMMENT,
-                                &"/*".to_string(),
-                                self.line,
-                                self.column,
-                            ),
-                        );
+                        return self.collect_multiline_comment();
                     } else {
                         return Lexer::advance_with_token(
                             self,
@@ -193,7 +191,7 @@ impl Lexer {
                                 TokenType::TOKEN_DIVIDE,
                                 &"/".to_string(),
                                 self.line,
-                                self.column,
+                                self.column + 1,
                             ),
                         );
                     }
@@ -205,7 +203,7 @@ impl Lexer {
                             TokenType::TOKEN_MULTIPLY,
                             &"*".to_string(),
                             self.line,
-                            self.column,
+                            self.column + 1,
                         ),
                     )
                 }
@@ -263,6 +261,9 @@ impl Lexer {
     pub fn collect_line_comment(&mut self) -> Token {
         let mut string_value = "".to_string();
 
+        //Skip the # symbol in the line
+        self.advance();
+
         while self.character != '\n' && self.character != '\0' {
             string_value.push(self.character);
 
@@ -271,6 +272,28 @@ impl Lexer {
 
         return Token::create(
             TokenType::TOKEN_LINE_COMMENT,
+            &string_value,
+            self.line,
+            self.column,
+        );
+    }
+
+    pub fn collect_multiline_comment(&mut self) -> Token {
+        let mut string_value = "".to_string();
+
+        //Current character is /
+        //Skip the /* symbol in the line
+        self.advance();
+        self.advance();
+
+        while !(self.character == '*' && self.peek() == '/') {
+            string_value.push(self.character);
+
+            self.advance()
+        }
+
+        return Token::create(
+            TokenType::TOKEN_MULTILINE_COMMENT,
             &string_value,
             self.line,
             self.column,

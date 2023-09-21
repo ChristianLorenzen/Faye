@@ -1,4 +1,4 @@
-function testfunc() 
+function testfunc()
 {
     var thisIsALoser = "Loser";
 
@@ -7,7 +7,7 @@ function testfunc()
     int intTest = 5;
     int twoTest = 2;
 
-    #int final = intTest + twoTest;
+    #int final = intTest + twoTePst;
 
     print(thisIsALoser);
     print(stringTest);
@@ -22,6 +22,11 @@ function testfunc()
 
     #boolStuff bool = true;
 
+    /* this is a multiline comment
+    with a little bit of everything
+    int i = 5; TODO
+    and ends with nothing */
+
     print(thisIsALoser, intTest, floatTest, isTrue, isFalse);
 
     function into(string testingT) {
@@ -33,6 +38,11 @@ function testfunc()
     into("Hello");
 };
 
+/*
+
+testing #this out
+
+*/
 
 function testRun() {
     print("Hi");
@@ -44,7 +54,7 @@ function testRun() {
     print("Comments aren't giving issue");
 };
 
-
+#TODO debug rest of file
 
 string test = "Hello";
 
@@ -56,8 +66,7 @@ function test(string x) {
     print(x);
 };
 
-/*
-
+test(null);
 test(15);
 test(15);
 test(true);
