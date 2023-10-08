@@ -4,6 +4,8 @@ sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
 flags = -g
 OUTDIR = out/
+echomv = echo $(objects)
+echoOUT = echo $(OUTDIR)
 move = mv $(objects) $(OUTDIR)
 OUTPROG = /usr/local/bin/
 PROGDIR = src/
@@ -13,6 +15,10 @@ $(exec): $(objects)
 
 %.o: %.c include/%.h
 	gcc -c $(flags) $< -o $@
+
+test:
+	$(echomv)
+	$(echoOUT)
 
 install:
 	make
